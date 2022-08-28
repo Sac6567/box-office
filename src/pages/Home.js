@@ -10,11 +10,9 @@ function Home() {
   const isShowsSearch = searchOption === 'shows';
 
   const onSearch = () => {
-    apiGet(`/search/${searchOption}?q=${input}`)
-      .then(r => r.json())
-      .then(result => {
-        setResults(result);
-      });
+    apiGet(`/search/${searchOption}?q=${input}`).then(result => {
+      setResults(result);
+    });
   };
 
   const onInputChange = ev => {
@@ -43,6 +41,8 @@ function Home() {
           ));
     }
   };
+
+  // console.log(`/search/${searchOption}?q=${input}`);
 
   return (
     <MainPageLayout>
