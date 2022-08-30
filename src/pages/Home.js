@@ -1,24 +1,16 @@
 import React, { useState } from 'react';
-import ActorGrid from '../components/actor/ActorGrid';
-import { MainPageLayout } from '../components/MainPageLayout';
-import ShowGrid from '../components/show/ShowGrid';
+import MainPageLayout from '../components/MainPageLayout';
 import { apiGet } from '../misc/config';
-import { useLastQuerry } from '../misc/custom-hooks';
+import ShowGrid from '../components/show/ShowGrid';
+import ActorGrid from '../components/actor/ActorGrid';
+import { useLastQuery } from '../misc/custom-hooks';
 
-function Home() {
-  const [input, setInput] = useLastQuerry();
+const Home = () => {
+  const [input, setInput] = useLastQuery();
   const [results, setResults] = useState(null);
   const [searchOption, setSearchOption] = useState('shows');
 
   const isShowsSearch = searchOption === 'shows';
-
-  // useEffect(() => {
-  //   console.log('use effect run');
-  //   return () => {
-  //     console.log('exit');
-  //   };
-  // }, [searchOption]);
-
   const onSearch = () => {
     apiGet(`/search/${searchOption}?q=${input}`).then(result => {
       setResults(result);
@@ -41,18 +33,19 @@ function Home() {
 
   const renderResults = () => {
     if (results && results.length === 0) {
-      return <div>No Results</div>;
+      return <div>No results</div>;
     }
+
     if (results && results.length > 0) {
       return results[0].show ? (
-        <ShowGrid data={results} /> // results.map(item => <div key={item.show.id}>{item.show.name}</div>)
+        <ShowGrid data={results} />
       ) : (
         <ActorGrid data={results} />
-      ); // results.map(item => <div key={item.person.id}>{item.person.name}</div>);
+      );
     }
-  };
 
-  // console.log(`/search/${searchOption}?q=${input}`);
+    return null;
+  };
 
   return (
     <MainPageLayout>
@@ -94,6 +87,6 @@ function Home() {
       {renderResults()}
     </MainPageLayout>
   );
-}
+};
 
 export default Home;

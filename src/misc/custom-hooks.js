@@ -4,11 +4,11 @@ import { apiGet } from './config';
 function showsReducer(prevState, action) {
   switch (action.type) {
     case 'ADD': {
-      return [...prevState, action.showsId];
+      return [...prevState, action.showId];
     }
 
     case 'REMOVE': {
-      return prevState.filter(showsId => showsId !== action.showsId);
+      return prevState.filter(showId => showId !== action.showId);
     }
 
     default:
@@ -31,10 +31,10 @@ function usePersistedReducer(reducer, initialState, key) {
 }
 
 export function useShows(key = 'shows') {
-  usePersistedReducer(showsReducer, [], key);
+  return usePersistedReducer(showsReducer, [], key);
 }
 
-export function useLastQuerry(key = 'lastQuerry') {
+export function useLastQuery(key = 'lastQuery') {
   const [input, setInput] = useState(() => {
     const persisted = sessionStorage.getItem(key);
 
@@ -64,7 +64,7 @@ const reducer = (prevState, action) => {
   }
 };
 
-export function useShow(showsId) {
+export function useShow(showId) {
   const [state, dispatch] = useReducer(reducer, {
     show: null,
     isLoading: true,
@@ -74,7 +74,7 @@ export function useShow(showsId) {
   useEffect(() => {
     let isMounted = true;
 
-    apiGet(`/shows/${showsId}?embed[]=seasons&embed[]=cast`)
+    apiGet(`/shows/${showId}?embed[]=seasons&embed[]=cast`)
       .then(results => {
         if (isMounted) {
           dispatch({ type: 'FETCH_SUCCESS', show: results });
@@ -89,7 +89,7 @@ export function useShow(showsId) {
     return () => {
       isMounted = false;
     };
-  }, [showsId]);
+  }, [showId]);
 
   return state;
 }
